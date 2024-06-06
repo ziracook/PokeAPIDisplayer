@@ -1,13 +1,13 @@
 package com.zirac.pokelist.network
 
 import retrofit2.Retrofit
-import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.http.GET
+import retrofit2.converter.gson.GsonConverterFactory
 
 private const val API_ENDPOINT = "https://pokeapi.co/api/v2/"
 
 private val retrofit = Retrofit.Builder()
-    .addConverterFactory(ScalarsConverterFactory.create())
+    .addConverterFactory(GsonConverterFactory.create())
     .baseUrl(API_ENDPOINT)
     .build()
 
@@ -18,7 +18,7 @@ interface PokemonApiService {
     The next url for pagination
      */
     @GET("pokemon")
-    suspend fun getPokemon(): String
+    suspend fun getPokemon(): PokemonResponse
 }
 
 // Retrofit singleton

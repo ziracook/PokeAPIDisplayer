@@ -27,7 +27,7 @@ class PokemonViewModel: ViewModel() {
         viewModelScope.launch {
             pokemonUiState = try {
                 val result = PokemonApi.retrofitService.getPokemon()
-                PokemonUiState.Success(result)
+                PokemonUiState.Success("Success: ${result.results.size}")
             } catch (_: IOException) {
                 PokemonUiState.Error
             }

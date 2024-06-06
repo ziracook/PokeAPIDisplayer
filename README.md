@@ -22,6 +22,8 @@ Error handling
   - Library used to make REST calls to PokeAPI 
 - Retrofit Scalar Converter
   - Allows returning JSON results as a String
+- Kotlin Serialization
+  - Parses JSON from PokeAPI
 
 ## User Stories
 - I'd like to view a list of Pokemon and their relevant data
