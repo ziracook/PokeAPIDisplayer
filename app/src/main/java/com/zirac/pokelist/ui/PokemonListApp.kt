@@ -1,5 +1,6 @@
 package com.zirac.pokelist.ui
 
+import android.annotation.SuppressLint
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -11,8 +12,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.zirac.pokelist.R
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PokemonListApp() {
@@ -20,7 +23,10 @@ fun PokemonListApp() {
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = { PokemonListAppBar(scrollBehavior = scrollBehavior) }
-    ) {val blah = it}
+    ) {
+        val pokemonViewModel: PokemonViewModel = viewModel()
+        PokemonListScreen(pokemonUiState = pokemonViewModel.pokemonUiState)
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
