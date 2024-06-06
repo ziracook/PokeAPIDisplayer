@@ -1,17 +1,17 @@
 # PokeAPIDisplayer
 
-App Architecture
+## App Architecture
 
-How to build/ run
+## How to build/ run
 
-Libraries used
+## Libraries used
 
-User Stories
+## User Stories
 - I'd like to view a list of Pokemon and their relevant data
 - I'd like to select a pokemon to view its detailed data
 - I'd like to search for a pokemon by name
 
-Requirements
+## Requirements
 - Interface with PokeAPI
 - List of pokemon names
 - Detailed screen for each Pokemon
