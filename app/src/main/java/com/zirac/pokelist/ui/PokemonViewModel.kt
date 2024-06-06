@@ -5,14 +5,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.zirac.pokelist.network.Pokemon
 import com.zirac.pokelist.network.PokemonApi
 import kotlinx.coroutines.launch
 import java.io.IOException
 
 sealed interface PokemonUiState {
-    data class Success(val pokemon: String): PokemonUiState
-    object Loading: PokemonUiState
-    object Error: PokemonUiState
+    data class Success(val pokemon: List<Pokemon>): PokemonUiState
+    data object Loading: PokemonUiState
+    data object Error: PokemonUiState
 
 }
 
@@ -27,7 +28,7 @@ class PokemonViewModel: ViewModel() {
         viewModelScope.launch {
             pokemonUiState = try {
                 val result = PokemonApi.retrofitService.getPokemon()
-                PokemonUiState.Success("Success: ${result.results.size}")
+                PokemonUiState.Success(result.results)
             } catch (_: IOException) {
                 PokemonUiState.Error
             }

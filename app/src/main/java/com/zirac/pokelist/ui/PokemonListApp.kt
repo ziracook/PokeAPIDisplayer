@@ -1,6 +1,9 @@
 package com.zirac.pokelist.ui
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -12,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.zirac.pokelist.R
 
@@ -22,16 +26,23 @@ fun PokemonListApp() {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-        topBar = { PokemonListAppBar(scrollBehavior = scrollBehavior) }
-    ) {
+        topBar = { PokemonListTopBar(scrollBehavior = scrollBehavior) }
+    ) { innerPadding ->
         val pokemonViewModel: PokemonViewModel = viewModel()
-        PokemonListScreen(pokemonUiState = pokemonViewModel.pokemonUiState)
+
+        Column(
+            modifier = Modifier
+                .padding(innerPadding),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+        ) {
+            PokemonListScreen(pokemonUiState = pokemonViewModel.pokemonUiState, modifier = Modifier.padding(innerPadding))
+        }
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PokemonListAppBar(scrollBehavior: TopAppBarScrollBehavior, modifier: Modifier = Modifier) {
+fun PokemonListTopBar(scrollBehavior: TopAppBarScrollBehavior, modifier: Modifier = Modifier) {
     CenterAlignedTopAppBar(
         scrollBehavior = scrollBehavior,
         title = {
