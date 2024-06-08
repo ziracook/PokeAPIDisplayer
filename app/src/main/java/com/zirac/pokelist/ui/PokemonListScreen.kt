@@ -26,7 +26,6 @@ private lateinit var viewModel: PokemonViewModel
 @Composable
 fun PokemonListScreen(
     pokemonListUiState: PokemonListUiState,
-    pokemonUiState: PokemonUiState,
     pokemonViewModel: PokemonViewModel,
     onNavigateToPokemonDetailScreen: () -> Unit,
     modifier: Modifier = Modifier

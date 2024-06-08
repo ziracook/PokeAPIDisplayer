@@ -30,6 +30,7 @@ fun PokemonDetailScreen(pokemonUiState: PokemonUiState) {
 fun PokemonDetails(pokemon: PokemonResponse) {
     // Capitalize the first letter
     val name = pokemon.name.replaceFirstChar(Char::titlecaseChar)
+
     //Log.e("test", "blah: ${pokemon}")
     Column(modifier = Modifier
         .padding(8.dp)

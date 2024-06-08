@@ -53,7 +53,7 @@ fun PokemonListApp(navController: NavHostController = rememberNavController()) {
     ) {
         composable(route = PokemonScreen.Start.name) {
             Scaffold(
-                topBar = { SearchField { navController.navigate(PokemonScreen.Detail.name) } }
+                topBar = { SearchField({ navController.navigate(PokemonScreen.Detail.name) }, pokemonViewModel)}
             ) { innerPadding ->
                 Column(
                     modifier = Modifier.padding(innerPadding),
@@ -61,7 +61,6 @@ fun PokemonListApp(navController: NavHostController = rememberNavController()) {
                 ) {
                     PokemonListScreen(
                         pokemonListUiState = pokemonViewModel.pokemonListUiState,
-                        pokemonUiState = pokemonViewModel.pokemonUiState,
                         pokemonViewModel = pokemonViewModel,
                         onNavigateToPokemonDetailScreen = { navController.navigate(PokemonScreen.Detail.name) })
                 }
@@ -85,17 +84,16 @@ fun PokemonListApp(navController: NavHostController = rememberNavController()) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchField(onSearchClicked: () -> Unit) {
+fun SearchField(onSearchClicked: () -> Unit, pokemonViewModel: PokemonViewModel) {
     var searchText by rememberSaveable { mutableStateOf("") }
     var active by rememberSaveable { mutableStateOf(false) }
-    val pokemonViewModel: PokemonViewModel = viewModel(factory = PokemonViewModel.Factory)
     SearchBar(
         query = searchText,
         onQueryChange = {searchText = it},
         onSearch = {
             active = false
-            pokemonViewModel.getPokemonByName(it.lowercase())
-            onSearchClicked()
+            pokemonViewModel.getPokemonByName(it.lowercase(), onSearchClicked)
+            //onSearchClicked()
        },
         active = false,
         onActiveChange = {active = it},

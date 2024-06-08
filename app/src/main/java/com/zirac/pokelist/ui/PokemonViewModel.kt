@@ -30,7 +30,7 @@ sealed interface PokemonListUiState {
 sealed interface PokemonUiState {
     data class Success(val pokemon: PokemonResponse): PokemonUiState
     data object Loading: PokemonUiState
-    data object Error: PokemonUiState
+    data class Error(val name: String): PokemonUiState
 
 }
 
@@ -72,9 +72,28 @@ class PokemonViewModel(private val pokemonRepository: PokemonRepository): ViewMo
         viewModelScope.launch {
             pokemonUiState = try {
                 val result = pokemonRepository.getPokemonByName(name)
+                Log.e("test", "loaded: ${result.name}")
                 PokemonUiState.Success(result)
             } catch (_: Exception) {
-                PokemonUiState.Error
+                Log.e("test", "load by name failed for: $name")
+                PokemonUiState.Error(name)
+            }
+        }
+    }
+
+    fun getPokemonByName(name: String, onPokemonLoaded: () -> Unit) {
+        viewModelScope.launch {
+            pokemonUiState = try {
+                val result = pokemonRepository.getPokemonByName(name)
+                Log.e("test", "loaded: ${result.name}")
+                PokemonUiState.Success(result)
+            } catch (_: Exception) {
+                Log.e("test", "load by name failed for: $name")
+                PokemonUiState.Error(name)
+            }
+
+            if (pokemonUiState is PokemonUiState.Success) {
+                onPokemonLoaded()
             }
         }
     }
