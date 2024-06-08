@@ -1,5 +1,6 @@
 package com.zirac.pokelist.network
 
+import com.google.gson.annotations.SerializedName
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -11,6 +12,7 @@ data class PokemonResponse(
     val height: Int,
     val types: List<Type>,
     val stats: List<Stat>,
+    @SerializedName("sprites") val sprites: Sprite
 )
 
 @Serializable
@@ -24,4 +26,10 @@ data class Stat(
     @SerialName("base_stat")
     val baseStat: Int,
     val effort: Int
+)
+
+@Serializable
+data class Sprite(
+    @SerializedName("front_default")
+    val url: String,
 )

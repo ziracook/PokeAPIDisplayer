@@ -48,6 +48,10 @@ class PokemonViewModel(private val pokemonRepository: PokemonRepository): ViewMo
         getPokemonList()
     }
 
+    fun setPokemonUiStateFromSearch(searchText: String) {
+
+    }
+
     fun getPokemonList() {
         viewModelScope.launch {
             pokemonListUiState = try {
@@ -69,7 +73,7 @@ class PokemonViewModel(private val pokemonRepository: PokemonRepository): ViewMo
             pokemonUiState = try {
                 val result = pokemonRepository.getPokemonByName(name)
                 PokemonUiState.Success(result)
-            } catch (_: IOException) {
+            } catch (_: Exception) {
                 PokemonUiState.Error
             }
         }

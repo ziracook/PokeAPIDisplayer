@@ -1,6 +1,7 @@
 package com.zirac.pokelist.ui
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -30,6 +31,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.zirac.pokelist.R
+import com.zirac.pokelist.network.PokemonResponse
 
 /**
  * enum values that represent the screens in the app
@@ -51,7 +53,7 @@ fun PokemonListApp(navController: NavHostController = rememberNavController()) {
     ) {
         composable(route = PokemonScreen.Start.name) {
             Scaffold(
-                topBar = { SearchField() }
+                topBar = { SearchField { navController.navigate(PokemonScreen.Detail.name) } }
             ) { innerPadding ->
                 Column(
                     modifier = Modifier.padding(innerPadding),
@@ -83,21 +85,24 @@ fun PokemonListApp(navController: NavHostController = rememberNavController()) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchField() {
+fun SearchField(onSearchClicked: () -> Unit) {
     var searchText by rememberSaveable { mutableStateOf("") }
     var active by rememberSaveable { mutableStateOf(false) }
+    val pokemonViewModel: PokemonViewModel = viewModel(factory = PokemonViewModel.Factory)
     SearchBar(
         query = searchText,
         onQueryChange = {searchText = it},
-        onSearch = {active = false},
+        onSearch = {
+            active = false
+            pokemonViewModel.getPokemonByName(it.lowercase())
+            onSearchClicked()
+       },
         active = false,
         onActiveChange = {active = it},
         modifier = Modifier
             .padding(horizontal = 6.dp)
             .fillMaxWidth(),
         leadingIcon = {Icon(imageVector = Icons.Default.Search, contentDescription = stringResource(R.string.search_icon_cd))}) {
-        // When user presses enter, fetch pokemon with name
-        // Navigate to pokemon page
     }
 }
 
@@ -105,7 +110,7 @@ fun SearchField() {
 @Composable
 fun DetailScreenTopBar(navController: NavHostController) {
     TopAppBar(
-        title = { Text(text = "app bar title") },
+        title = { Text(text = "Pokemon Details") },
         navigationIcon = {
             if (navController.previousBackStackEntry != null) {
                 IconButton(onClick = { navController.navigateUp() }) {
