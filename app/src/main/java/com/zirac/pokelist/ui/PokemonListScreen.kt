@@ -6,61 +6,52 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Text
-import androidx.compose.material3.pulltorefresh.PullToRefreshContainer
-import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.LiveData
 import com.zirac.pokelist.R
 import com.zirac.pokelist.network.Pokemon
+import com.zirac.pokelist.network.PokemonResponse
 
 private lateinit var viewModel: PokemonViewModel
 
 @Composable
 fun PokemonListScreen(
     pokemonListUiState: PokemonListUiState,
+    pokemonUiState: PokemonUiState,
     pokemonViewModel: PokemonViewModel,
+    onNavigateToPokemonDetailScreen: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     viewModel = pokemonViewModel
     when (pokemonListUiState) {
-        is PokemonListUiState.Success -> PokemonList(modifier.fillMaxSize(), pokemonViewModel)
+        is PokemonListUiState.Success -> PokemonList(modifier.fillMaxSize(), pokemonViewModel, onNavigateToPokemonDetailScreen)
         is PokemonListUiState.Loading -> LoadingSpinner(modifier.fillMaxSize())
         is PokemonListUiState.Error -> ErrorMessage(modifier.fillMaxSize())
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PokemonList(modifier: Modifier = Modifier, pokemonViewModel: PokemonViewModel) {
+fun PokemonList(modifier: Modifier = Modifier, pokemonViewModel: PokemonViewModel, onNavigateToPokemonDetailScreen: () -> Unit) {
     val myList = remember { pokemonViewModel.pokemonList }
 
 
     LazyColumn (modifier = modifier
         .padding(top = 8.dp)){
         items(myList) { pokemon ->
-            Pokemon(pokemon)
+            Pokemon(pokemon, onNavigateToPokemonDetailScreen)
         }
         item {
             LaunchedEffect(true) {
-                //Do something when List end has been reached
+                // Load more pokemon when you reach the end of the list
                 pokemonViewModel.loadMorePokemon()
             }
         }
@@ -84,7 +75,7 @@ fun PokemonList(modifier: Modifier = Modifier, pokemonViewModel: PokemonViewMode
 }
 
 @Composable
-fun Pokemon(pokemon: Pokemon) {
+fun Pokemon(pokemon: Pokemon, onNavigateToPokemonDetailScreen: () -> Unit) {
     // Capitalize the first letter
     val name = pokemon.name.replaceFirstChar(Char::titlecaseChar)
 
@@ -92,7 +83,10 @@ fun Pokemon(pokemon: Pokemon) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 4.dp, horizontal = 16.dp),
-        onClick = { onPokemonClicked(pokemon) }
+        onClick = {
+            onPokemonClicked(pokemon)
+            onNavigateToPokemonDetailScreen()
+        }
         //onClick = {viewModel.loadMorePokemon()}
     ) {
         Text(text = name,
@@ -109,7 +103,8 @@ private fun onPokemonClicked(pokemon: Pokemon) {
 @Composable
 fun LoadingSpinner(modifier: Modifier = Modifier) {
     Box(
-        modifier = modifier
+        modifier = modifier,
+        contentAlignment = Alignment.TopCenter
     ) {
         CircularProgressIndicator()
     }

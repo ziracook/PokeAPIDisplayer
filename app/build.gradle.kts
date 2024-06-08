@@ -69,6 +69,7 @@ dependencies {
     implementation(libs.logging.interceptor)
     implementation(libs.androidx.runtime.livedata)
     implementation(libs.androidx.material3.android)
+    implementation(libs.androidx.navigation.compose)
 
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)

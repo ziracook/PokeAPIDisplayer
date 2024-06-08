@@ -79,7 +79,6 @@ class PokemonViewModel(private val pokemonRepository: PokemonRepository): ViewMo
         viewModelScope.launch {
             try {
                 val result = pokemonRepository.getNextPokemonPage(next)
-
                 pokemonList.addAll(result.results)
 
                 next = result.next
