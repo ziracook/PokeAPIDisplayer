@@ -18,6 +18,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,7 +41,7 @@ fun PokemonListScreen(
 ) {
     viewModel = pokemonViewModel
     when (pokemonListUiState) {
-        is PokemonListUiState.Success -> PokemonList(pokemonViewModel.livePokemon, modifier.fillMaxSize(), pokemonViewModel)
+        is PokemonListUiState.Success -> PokemonList(modifier.fillMaxSize(), pokemonViewModel)
         is PokemonListUiState.Loading -> LoadingSpinner(modifier.fillMaxSize())
         is PokemonListUiState.Error -> ErrorMessage(modifier.fillMaxSize())
     }
@@ -47,24 +49,22 @@ fun PokemonListScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PokemonList(livePokemon: LiveData<List<Pokemon>>, modifier: Modifier = Modifier, pokemonViewModel: PokemonViewModel) {
-    val pokemonList by pokemonViewModel.livePokemon.observeAsState(initial = emptyList())
+fun PokemonList(modifier: Modifier = Modifier, pokemonViewModel: PokemonViewModel) {
+    val myList = remember { pokemonViewModel.pokemonList }
+
+
     LazyColumn (modifier = modifier
         .padding(top = 8.dp)){
-        items(pokemonList) { pokemon ->
+        items(myList) { pokemon ->
             Pokemon(pokemon)
         }
+        item {
+            LaunchedEffect(true) {
+                //Do something when List end has been reached
+                pokemonViewModel.loadMorePokemon()
+            }
+        }
     }
-
-    //val pokemonList by livePokemon.observeAsState(initial = emptyList())
-//    val listState = rememberLazyListState()
-//    val atBottom: Boolean by remember {
-//        derivedStateOf { !listState.canScrollForward }
-//    }
-//    LaunchedEffect(atBottom) {
-//        if (atBottom) // load more {
-//            viewModel.loadMorePokemon()
-//    }
 
 //    val pullToRefreshState = rememberPullToRefreshState()
 //    Box(modifier = modifier.nestedScroll(pullToRefreshState.nestedScrollConnection)) {
@@ -92,8 +92,8 @@ fun Pokemon(pokemon: Pokemon) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 4.dp, horizontal = 16.dp),
-        //onClick = { onPokemonClicked(pokemon) }
-        onClick = {viewModel.loadMorePokemon()}
+        onClick = { onPokemonClicked(pokemon) }
+        //onClick = {viewModel.loadMorePokemon()}
     ) {
         Text(text = name,
             modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp),

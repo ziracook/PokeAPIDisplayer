@@ -1,6 +1,8 @@
 package com.zirac.pokelist.ui
 
+import android.util.Log
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
@@ -38,8 +40,7 @@ class PokemonViewModel(private val pokemonRepository: PokemonRepository): ViewMo
     var pokemonUiState: PokemonUiState by mutableStateOf(PokemonUiState.Loading)
         private set
 
-    val livePokemon = MutableLiveData<List<Pokemon>>()
-    private var pokemon = mutableListOf<Pokemon>()
+    var pokemonList = mutableStateListOf<Pokemon>()
 
     var next: String by mutableStateOf("")
         private set
@@ -51,9 +52,10 @@ class PokemonViewModel(private val pokemonRepository: PokemonRepository): ViewMo
         viewModelScope.launch {
             pokemonListUiState = try {
                 val result = pokemonRepository.getPokemonList()
-                pokemon.clear()
-                pokemon.addAll(result.results)
-                livePokemon.value = pokemon
+
+                pokemonList.clear()
+                pokemonList.addAll(result.results)
+
                 next = result.next
                 PokemonListUiState.Success(result.results)
             } catch (_: IOException) {
@@ -76,10 +78,10 @@ class PokemonViewModel(private val pokemonRepository: PokemonRepository): ViewMo
     fun loadMorePokemon() {
         viewModelScope.launch {
             try {
-                val param = next.replace(pokemonRepository.apiEndpoint, "")
-                val result = pokemonRepository.getMorePokemon()
-                pokemon.addAll(result.results)
-                livePokemon.value = pokemon
+                val result = pokemonRepository.getNextPokemonPage(next)
+
+                pokemonList.addAll(result.results)
+
                 next = result.next
             } catch (_: IOException) {
                 pokemonListUiState = PokemonListUiState.Error
