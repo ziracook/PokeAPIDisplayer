@@ -13,7 +13,15 @@
 ### Data Layer
 Uses Retrofit
 Fetches data from PokeAPI
+Exposes data to the UI layer
 Error handling
+
+### Repository
+Sits between UI and Data Layer
+Allows data to be loosely couped from the ViewModel
+
+
+Used VM Factory and DI to access data in the UI
 
 ## How to build/ run
 

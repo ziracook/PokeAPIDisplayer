@@ -32,31 +32,16 @@ fun PokemonListApp() {
     Scaffold(
         topBar = { SearchField() }
     ) { innerPadding ->
-        val pokemonViewModel: PokemonViewModel = viewModel()
+        val pokemonViewModel: PokemonViewModel = viewModel(factory = PokemonViewModel.Factory)
 
         Column(
             modifier = Modifier
                 .padding(innerPadding),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            PokemonListScreen(pokemonUiState = pokemonViewModel.pokemonUiState)
+            PokemonListScreen(pokemonListUiState = pokemonViewModel.pokemonListUiState, pokemonViewModel = pokemonViewModel)
         }
     }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun PokemonListTopBar(scrollBehavior: TopAppBarScrollBehavior, modifier: Modifier = Modifier) {
-    CenterAlignedTopAppBar(
-        scrollBehavior = scrollBehavior,
-        title = {
-            Text(
-                text = stringResource(R.string.app_name),
-                style = MaterialTheme.typography.headlineSmall,
-            )
-        },
-        modifier = modifier
-    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
