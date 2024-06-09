@@ -6,16 +6,17 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ElevatedButton
-import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.zirac.pokelist.network.PokemonResponse
+import com.zirac.pokelist.R
 
 @Composable
 fun PokemonDetailScreen(pokemonUiState: PokemonUiState) {
@@ -31,14 +32,11 @@ fun PokemonDetails(pokemon: PokemonResponse) {
     // Capitalize the first letter
     val name = pokemon.name.replaceFirstChar(Char::titlecaseChar)
 
-    //Log.e("test", "blah: ${pokemon}")
     Column(modifier = Modifier
         .padding(8.dp)
         .fillMaxSize())
     {
         PokemonPhoto(url = pokemon.sprites.url)
-        //PokemonPhoto(url = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png")
-
         PokemonDetail("Id: ${pokemon.id}")
         PokemonDetail("Name: $name")
         PokemonDetail("Weight: ${pokemon.weight}")
@@ -87,5 +85,13 @@ fun Loading() {
 
 @Composable
 fun Error() {
-
+    Column(modifier = Modifier
+        .padding(8.dp)
+        .fillMaxSize())
+    {
+        Text(text = stringResource(id = R.string.api_error),
+            modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp),
+            fontSize = 20.sp
+        )
+    }
 }

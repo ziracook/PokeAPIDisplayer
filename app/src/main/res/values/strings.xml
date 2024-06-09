@@ -2,5 +2,6 @@
     <string name="app_name">PokeAPI Displayer</string>
     <string name="detail">detail screen</string>
     <string name="api_error">Uh oh!\nThere was an error fetching Pokemon, please try again</string>
+    <string name="search_error">A Pokemon with that name wasn\'t found, please try again</string>
     <string name="search_icon_cd">Search field</string>
 </resources>

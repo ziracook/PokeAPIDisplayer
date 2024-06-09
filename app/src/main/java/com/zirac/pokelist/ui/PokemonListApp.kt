@@ -1,7 +1,9 @@
 package com.zirac.pokelist.ui
 
 import android.annotation.SuppressLint
+import android.app.Application
 import android.util.Log
+import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -23,6 +25,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -32,6 +35,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.zirac.pokelist.R
 import com.zirac.pokelist.network.PokemonResponse
+import kotlin.coroutines.coroutineContext
 
 /**
  * enum values that represent the screens in the app
@@ -87,13 +91,13 @@ fun PokemonListApp(navController: NavHostController = rememberNavController()) {
 fun SearchField(onSearchClicked: () -> Unit, pokemonViewModel: PokemonViewModel) {
     var searchText by rememberSaveable { mutableStateOf("") }
     var active by rememberSaveable { mutableStateOf(false) }
+    var searchFailed by rememberSaveable{ mutableStateOf(false) }
     SearchBar(
         query = searchText,
         onQueryChange = {searchText = it},
         onSearch = {
             active = false
-            pokemonViewModel.getPokemonByName(it.lowercase(), onSearchClicked)
-            //onSearchClicked()
+            pokemonViewModel.getPokemonByName(it.lowercase(), onSearchClicked, {searchFailed = true})
        },
         active = false,
         onActiveChange = {active = it},
@@ -101,6 +105,11 @@ fun SearchField(onSearchClicked: () -> Unit, pokemonViewModel: PokemonViewModel)
             .padding(horizontal = 6.dp)
             .fillMaxWidth(),
         leadingIcon = {Icon(imageVector = Icons.Default.Search, contentDescription = stringResource(R.string.search_icon_cd))}) {
+    }
+
+    if (searchFailed) {
+        PokemonLoadError()
+        searchFailed = false
     }
 }
 
@@ -117,4 +126,13 @@ fun DetailScreenTopBar(navController: NavHostController) {
             }
         }
     )
+}
+
+@Composable
+fun PokemonLoadError() {
+    val text = stringResource(id = R.string.search_error)
+    val duration = Toast.LENGTH_LONG
+
+    val toast = Toast.makeText(LocalContext.current, text, duration) // in Activity
+    toast.show()
 }

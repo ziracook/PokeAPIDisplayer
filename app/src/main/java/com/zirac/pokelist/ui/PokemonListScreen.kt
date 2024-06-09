@@ -19,7 +19,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.zirac.pokelist.R
 import com.zirac.pokelist.network.Pokemon
-import com.zirac.pokelist.network.PokemonResponse
 
 private lateinit var viewModel: PokemonViewModel
 

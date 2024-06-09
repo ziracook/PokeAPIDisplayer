@@ -1,6 +1,7 @@
 package com.zirac.pokelist.ui
 
 import android.util.Log
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -81,7 +82,7 @@ class PokemonViewModel(private val pokemonRepository: PokemonRepository): ViewMo
         }
     }
 
-    fun getPokemonByName(name: String, onPokemonLoaded: () -> Unit) {
+    fun getPokemonByName(name: String, onPokemonLoaded: () -> Unit, onPokemonLoadFailed: () -> Unit) {
         viewModelScope.launch {
             pokemonUiState = try {
                 val result = pokemonRepository.getPokemonByName(name)
@@ -94,6 +95,9 @@ class PokemonViewModel(private val pokemonRepository: PokemonRepository): ViewMo
 
             if (pokemonUiState is PokemonUiState.Success) {
                 onPokemonLoaded()
+            }
+            else {
+                onPokemonLoadFailed()
             }
         }
     }
