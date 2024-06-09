@@ -22,13 +22,38 @@ Exposes data to the UI layer
 Error handling
 
 ### Repository
-Sits between UI and Data Layer
-Allows data to be loosely couped from the ViewModel
-Used VM Factory and DI to access data in the UI
+PokemonRepository.kt
+- Sits between UI and Data Layer 
+- Allows data to be loosely couped from the ViewModel 
+- Used VM Factory and DI to access data in the UI
 
 ### View Model
-Holds UI state for Views
-Calls to the PokemonRepository to fetch Pokemon
+PokemonViewModel.kt 
+- Holds UI state for Views 
+- Calls to the PokemonRepository to fetch Pokemon
+
+### Views
+PokemonListScreen.kt
+- Endless scrolling list of all pokemon
+- Search bar at the top where user can search for a pokemon 
+- Each item can be clicked and the app will navigate to a detail screen
+
+PokemonDetailScreen.kt
+- Screen with details about a specific pokemon
+- Displays an image loaded from the network and other pokemon stats
+
+### Navigation
+PokemonListApp.kt
+- Holds NavGraph that routes between screens
+- PokemonScreen enum holds an id for each screen
+
+### Networking
+PokemonApiService.kt
+- Sets up GET calls to PokeAPI
+PokemonListResponse.kt and PokemonResponse.kt
+- Used to deserialize API responses into usable objects
+AppContainer.kt
+- Sets up Retrofit classes needed to make API calls (client, logging interceptor, base endpoint)
 
 ## How to build/ run
 Sync Gradle and run with default config 
@@ -69,4 +94,4 @@ Sync Gradle and run with default config
 - Search box
 - Handle pagination
 - Implement error handling
-- Tests
+- Tests TODO
