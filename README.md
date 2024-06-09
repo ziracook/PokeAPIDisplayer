@@ -31,6 +31,7 @@ Holds UI state for Views
 Calls to the PokemonRepository to fetch Pokemon
 
 ## How to build/ run
+Sync Gradle and run with default config 
 
 ## Libraries used
 - Retrofit
