@@ -1,8 +1,6 @@
 package com.zirac.pokelist.ui
 
 import android.annotation.SuppressLint
-import android.app.Application
-import android.util.Log
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
@@ -10,7 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -34,8 +32,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.zirac.pokelist.R
-import com.zirac.pokelist.network.PokemonResponse
-import kotlin.coroutines.coroutineContext
 
 /**
  * enum values that represent the screens in the app
@@ -121,7 +117,7 @@ fun DetailScreenTopBar(navController: NavHostController) {
         navigationIcon = {
             if (navController.previousBackStackEntry != null) {
                 IconButton(onClick = { navController.navigateUp() }) {
-                    Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "")
+                    Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "")
                 }
             }
         }
