@@ -18,6 +18,14 @@ data class PokemonResponse(
 @Serializable
 data class Type(
     val slot: Int,
+    @SerializedName("type")
+    val element: Element
+)
+
+@Serializable
+data class Element(
+    val name: String,
+    val url: String
 )
 
 
@@ -25,7 +33,15 @@ data class Type(
 data class Stat(
     @SerialName("base_stat")
     val baseStat: Int,
-    val effort: Int
+    val effort: Int,
+    @SerializedName("stat")
+    val statType: StatType
+)
+
+@Serializable
+data class StatType(
+    val name: String,
+    val url: String
 )
 
 @Serializable
