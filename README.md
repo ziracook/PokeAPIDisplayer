@@ -29,7 +29,7 @@ MainActivity.kt
 
 PokemonListApp.kt
 - Contains the main composable that displays contents on the screen (top bar and PokemonListScreen composable)
-- 
+  
 PokemonListScreen.kt
 - Endless scrolling list of all pokemon
 - Search bar at the top where user can search for a pokemon by name
