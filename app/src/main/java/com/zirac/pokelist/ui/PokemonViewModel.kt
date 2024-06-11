@@ -1,6 +1,5 @@
 package com.zirac.pokelist.ui
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -16,7 +15,6 @@ import com.zirac.pokelist.data.PokemonRepository
 import com.zirac.pokelist.network.Pokemon
 import com.zirac.pokelist.network.PokemonResponse
 import kotlinx.coroutines.launch
-import java.io.IOException
 
 sealed interface PokemonListUiState {
     data class Success(val pokemon: List<Pokemon>): PokemonListUiState
@@ -56,7 +54,7 @@ class PokemonViewModel(private val pokemonRepository: PokemonRepository): ViewMo
 
                 next = result.next
                 PokemonListUiState.Success(result.results)
-            } catch (_: IOException) {
+            } catch (_: Exception) {
                 PokemonListUiState.Error
             }
         }
@@ -66,10 +64,8 @@ class PokemonViewModel(private val pokemonRepository: PokemonRepository): ViewMo
         viewModelScope.launch {
             pokemonUiState = try {
                 val result = pokemonRepository.getPokemonByName(name)
-                Log.e("test", "loaded: ${result.name}")
                 PokemonUiState.Success(result)
             } catch (_: Exception) {
-                Log.e("test", "load by name failed for: $name")
                 PokemonUiState.Error(name)
             }
         }
@@ -79,10 +75,8 @@ class PokemonViewModel(private val pokemonRepository: PokemonRepository): ViewMo
         viewModelScope.launch {
             pokemonUiState = try {
                 val result = pokemonRepository.getPokemonByName(name)
-                Log.e("test", "loaded: ${result.name}")
                 PokemonUiState.Success(result)
             } catch (_: Exception) {
-                Log.e("test", "load by name failed for: $name")
                 PokemonUiState.Error(name)
             }
 
@@ -100,9 +94,8 @@ class PokemonViewModel(private val pokemonRepository: PokemonRepository): ViewMo
             try {
                 val result = pokemonRepository.getNextPokemonPage(next)
                 pokemonList.addAll(result.results)
-
                 next = result.next
-            } catch (_: IOException) {
+            } catch (_: Exception) {
                 pokemonListUiState = PokemonListUiState.Error
             }
         }
